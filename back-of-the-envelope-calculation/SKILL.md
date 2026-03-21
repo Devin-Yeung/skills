@@ -19,21 +19,16 @@ numbat <<'EOF'
 EOF
 ```
 
-## Common constants to define in numbat
+## Best Practices
+
+Define ad-hoc units as needed, numbat helps catch dimensional errors and ensures consistent calculations. 
 
 ```
-# Traffic
-let rps = <n> Hz               # requests per second
-let rpd = rps * 1 day          # requests per day
+@aliases(urls)
+unit url # a dimension called `Url` is created automatically
 
-# Storage
-let row_size = <n> byte
-let retention = <n> year
-let total_storage = rps * row_size * retention
-
-# Bandwidth
-let read_ratio = <n>           # dimensionless
-let write_ratio = <n>
+let urls_per_sec = 1000 url/s      # dimension of Url * Time
+let urls_in_a_day = rps * 1 day    # dimension of Url
 ```
 
 ## Reference numbers (encode as needed)
@@ -57,17 +52,6 @@ let write_ratio = <n>
 | Typical server RAM              | 256 GB                |
 | Typical server cores            | 64                    |
 
-| Unit        | Value                       |
-| ----------- | --------------------------- |
-| 1 KB        | 10³ bytes                   |
-| 1 MB        | 10⁶ bytes                   |
-| 1 GB        | 10⁹ bytes                   |
-| 1 TB        | 10¹² bytes                  |
-| 1 PB        | 10¹⁵ bytes                  |
-| 1 day       | 86,400 s ≈ 10⁵ s            |
-| 1 month     | 2.6 × 10⁶ s                 |
-| 1 year      | 3.15 × 10⁷ s                |
-
 ## Workflow
 
 1. **Clarify the unknowns** — identify what needs to be estimated (QPS, storage, bandwidth, latency budget, server count).
@@ -78,14 +62,21 @@ let write_ratio = <n>
 
 ## Example
 
-User: "Estimate storage for a URL shortener serving 100M writes/day, keeping URLs for 5 years."
+User: "Estimate storage for a URL shortener serving 1000 urls/sec, keeping URLs for 5 years."
 
 ```
 numbat <<'EOF'
-let writes_per_day = 100_000_000 / day
-let row_bytes = 500 byte        # short URL + long URL + metadata
+
+@aliases(urls)
+unit url
+
+let urls_per_sec = 1000 urls / s
+
+let bytes_per_record = 500 byte / url  # short URL + long URL + metadata
 let retention = 5 year
-let total = writes_per_day * row_bytes * retention -> TB
+
+let total = urls_per_sec * bytes_per_record * retention -> TB
 total
+
 EOF
 ```
