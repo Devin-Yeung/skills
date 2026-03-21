@@ -37,7 +37,7 @@ let urls_in_a_day = rps * 1 day    # dimension of Url
 2. **State assumptions explicitly** — write them out before calculating.
 3. **Run numbat** — express calculations as unit-aware expressions so numbat catches dimensional errors.
 4. **Interpret the result** — round to 1–2 significant figures, flag bottlenecks, note where assumptions dominate.
-5. **Sanity-check** — compare against known reference numbers above.
+5. **Sanity-check** — compare against known reference numbers below to check if the result is in the right ballpark.
 
 ## Example
 
