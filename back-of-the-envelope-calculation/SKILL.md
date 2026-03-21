@@ -31,27 +31,6 @@ let urls_per_sec = 1000 url/s      # dimension of Url * Time
 let urls_in_a_day = rps * 1 day    # dimension of Url
 ```
 
-## Reference numbers (encode as needed)
-
-| Resource                        | Latency / Size        |
-| ------------------------------- | --------------------- |
-| L1 cache                        | 0.5 ns                |
-| L2 cache                        | 7 ns                  |
-| RAM access                      | 100 ns                |
-| SSD random read                 | 150 µs                |
-| HDD seek                        | 10 ms                 |
-| Network round-trip (same DC)    | 0.5 ms                |
-| Network round-trip (cross-DC)   | 150 ms                |
-| Typical HTTP request            | 1–10 ms               |
-| MySQL/Postgres read (simple)    | 1 ms                  |
-| MySQL/Postgres write            | 5 ms                  |
-| Redis get                       | 0.1 ms                |
-| HDD throughput                  | 100 MB/s              |
-| SSD throughput                  | 500 MB/s              |
-| NIC throughput                  | 1 Gbps                |
-| Typical server RAM              | 256 GB                |
-| Typical server cores            | 64                    |
-
 ## Workflow
 
 1. **Clarify the unknowns** — identify what needs to be estimated (QPS, storage, bandwidth, latency budget, server count).
@@ -80,3 +59,24 @@ total
 
 EOF
 ```
+
+## Reference numbers (encode as needed)
+
+| Resource                        | Latency / Size        |
+| ------------------------------- | --------------------- |
+| L1 cache                        | 0.5 ns                |
+| L2 cache                        | 7 ns                  |
+| RAM access                      | 100 ns                |
+| SSD random read                 | 150 µs                |
+| HDD seek                        | 10 ms                 |
+| Network round-trip (same DC)    | 0.5 ms                |
+| Network round-trip (cross-DC)   | 150 ms                |
+| Typical HTTP request            | 1–10 ms               |
+| MySQL/Postgres read (simple)    | 1 ms                  |
+| MySQL/Postgres write            | 5 ms                  |
+| Redis get                       | 0.1 ms                |
+| HDD throughput                  | 100 MB/s              |
+| SSD throughput                  | 500 MB/s              |
+| NIC throughput                  | 1 Gbps                |
+| Typical server RAM              | 256 GB                |
+| Typical server cores            | 64                    |
