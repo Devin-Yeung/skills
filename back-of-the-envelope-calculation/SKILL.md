@@ -64,21 +64,39 @@ EOF
 
 ## Reference numbers (encode as needed)
 
-| Resource                      | Latency / Size |
-| ----------------------------- | -------------- |
-| L1 cache                      | 0.5 ns         |
-| L2 cache                      | 7 ns           |
-| RAM access                    | 100 ns         |
-| SSD random read               | 150 µs         |
-| HDD seek                      | 10 ms          |
-| Network round-trip (same DC)  | 0.5 ms         |
-| Network round-trip (cross-DC) | 150 ms         |
-| Typical HTTP request          | 1–10 ms        |
-| MySQL/Postgres read (simple)  | 1 ms           |
-| MySQL/Postgres write          | 5 ms           |
-| Redis get                     | 0.1 ms         |
-| HDD throughput                | 100 MB/s       |
-| SSD throughput                | 500 MB/s       |
-| NIC throughput                | 1 Gbps         |
-| Typical server RAM            | 256 GB         |
-| Typical server cores          | 64             |
+### CPU
+
+| Operations               | Latency (measure in time) | Latency (measure in cycles) |
+| ------------------------ | ------------------------- | --------------------------- |
+| L1 cache                 | 1 ns                      | 4 cycles                    |
+| L2 cache                 | 4 ns                      | 12 cycles                   |
+| L3 cache                 | 13 ns                     | 40 cycles                   |
+| Cross-core communication | 30 ns                     | 100 cycles                  |
+| RAM access               | 100 ns                    | 300 cycles                  |
+
+### Disk
+
+The measurements of random R/W and sequential R/W are different on purpose, as they represent different access patterns:
+
+- Random R/W: Accessing data at random locations on the disk, where the overhead of seeking is significant, latency is the primary concern.
+- Sequential R/W: Accessing data in a contiguous manner, the overhead of seeking is minimized, throughput is the primary concern.
+
+| Operations          | Latency                    |
+| ------------------- | -------------------------- |
+| NVMe SSD random R/W | 10 ~ 30 µs (take 20 µs)    |
+| SATA SSD random R/W | 100 ~ 200 µs (take 150 µs) |
+| HDD random R/W      | 10 ms                      |
+
+| Operations              | Throughput             |
+| ----------------------- | ---------------------- |
+| NVMe SSD sequential R/W | 4,000 ~ 10,000 MiB / s |
+| SATA SSD sequential R/W | 450 ~ 550 MiB / s      |
+| HDD sequential R/W      | 150 ~ 250 MiB/ s       |
+
+### Network and services
+
+| Operations                    | Latency |
+| ----------------------------- | ------- |
+| Network round-trip (same DC)  | 0.5 ms  |
+| Network round-trip (cross-DC) | 150 ms  |
+| Typical HTTP request          | 1–10 ms |
