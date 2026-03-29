@@ -8,11 +8,13 @@ description: Perform back-of-the-envelope calculations for system design estimat
 When the user describes a system design problem or estimation question, break it down into measurable quantities, then use `numbat` to compute the results.
 
 Run calculations with:
+
 ```
 numbat -e "<expression>"
 ```
 
 Or for multi-line calculations:
+
 ```
 numbat <<'EOF'
 <expressions>
@@ -21,7 +23,7 @@ EOF
 
 ## Best Practices
 
-Define ad-hoc units as needed, numbat helps catch dimensional errors and ensures consistent calculations. 
+Define ad-hoc units as needed, numbat helps catch dimensional errors and ensures consistent calculations.
 
 ```
 @aliases(urls)
@@ -62,21 +64,21 @@ EOF
 
 ## Reference numbers (encode as needed)
 
-| Resource                        | Latency / Size        |
-| ------------------------------- | --------------------- |
-| L1 cache                        | 0.5 ns                |
-| L2 cache                        | 7 ns                  |
-| RAM access                      | 100 ns                |
-| SSD random read                 | 150 µs                |
-| HDD seek                        | 10 ms                 |
-| Network round-trip (same DC)    | 0.5 ms                |
-| Network round-trip (cross-DC)   | 150 ms                |
-| Typical HTTP request            | 1–10 ms               |
-| MySQL/Postgres read (simple)    | 1 ms                  |
-| MySQL/Postgres write            | 5 ms                  |
-| Redis get                       | 0.1 ms                |
-| HDD throughput                  | 100 MB/s              |
-| SSD throughput                  | 500 MB/s              |
-| NIC throughput                  | 1 Gbps                |
-| Typical server RAM              | 256 GB                |
-| Typical server cores            | 64                    |
+| Resource                      | Latency / Size |
+| ----------------------------- | -------------- |
+| L1 cache                      | 0.5 ns         |
+| L2 cache                      | 7 ns           |
+| RAM access                    | 100 ns         |
+| SSD random read               | 150 µs         |
+| HDD seek                      | 10 ms          |
+| Network round-trip (same DC)  | 0.5 ms         |
+| Network round-trip (cross-DC) | 150 ms         |
+| Typical HTTP request          | 1–10 ms        |
+| MySQL/Postgres read (simple)  | 1 ms           |
+| MySQL/Postgres write          | 5 ms           |
+| Redis get                     | 0.1 ms         |
+| HDD throughput                | 100 MB/s       |
+| SSD throughput                | 500 MB/s       |
+| NIC throughput                | 1 Gbps         |
+| Typical server RAM            | 256 GB         |
+| Typical server cores          | 64             |

@@ -24,7 +24,7 @@
       files = "\\.md$";
       excludes = [ ".devenv" ];
       language = "system";
-      pass_filenames = false;
+      pass_filenames = true; # in case that oxfmt touch other supported files
     };
   };
 
