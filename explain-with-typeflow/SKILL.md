@@ -1,46 +1,36 @@
 ---
 name: explain-with-typeflow
-description: Trace code behavior with call-graph trees and type-flow trees. Use when the user asks how a system works, asks to explain code changes, or requests call graph/type flow diagrams.
+description: Typeflow maps a value's changing typed roles as a tree. Use when the user asks about a type's design or a value's flow across system boundaries.
 ---
 
-Use this skill to explain code by tracing execution and data together. The output should make the system feel navigable: what calls what, what types cross each seam, and where behavior changes.
+A Typeflow is a rooted projection of either a type's design or a value's provenance. Nodes name a typed role or representation. Edges name the operation and boundary that constructs, transforms, validates, transports, or consumes it.
 
 ## Steps
 
-1. Identify the explanation branch: system behavior, code changes, or both. Complete when the scope is clear from the user's wording or from the changed files/diff.
-2. Do enough legwork to ground the trace in code. For system behavior, find the entry points, core orchestrators, and terminal effects. For changes, inspect the diff plus adjacent call sites and changed types. Complete when every named edge in the output is backed by code you inspected.
-3. Write the call graph as a tree. Use function/module names as nodes, indent child calls under callers, and annotate important branches with short labels like `success`, `retry`, `error`, or `shutdown`. Complete when a reader can follow runtime control from entry point to terminal effect.
-4. Write the type flow as a tree. Show structs/enums/traits/generics moving through the flow, including conversions, serialized forms, headers, DTOs, messages, errors, and trait seams. Complete when every major boundary names the type shape that crosses it.
-5. Add a short interpretation. Explain the core idea, the important seam, or the behavioral impact of the change in one concise paragraph. Complete when the tree is connected to the user's practical question, not left as raw structure.
+1. Choose the Typeflow branch: type design, value flow, or a changed flow. Name the root value or type and the question it must answer. Complete when the root, scope, and requested outcome are explicit.
+2. Inspect every in-scope declaration, constructor, conversion, and consumer. For a value flow, also inspect its entry representation and each terminal representation. Complete when every node and edge intended for the tree has direct source evidence.
+3. Draw the Typeflow using the tree notation below. For value flow, follow the typed value from its root to each in-scope terminal role, with transformation edges and explicit success or error children. For type design, draw constructors, cases, and fields that establish the type's invariants. Complete when every in-scope terminal role or construction case relevant to the question is accounted for.
+4. Read the design through the Typeflow. State the invariant each relevant type makes explicit and the boundary responsible for every remaining runtime guarantee. Complete when the explanation answers why the types and transformations exist, rather than only restating their names.
+5. For a changed flow, mark the changed nodes, edges, or invariants and leave unchanged structure unmarked. Complete when the behavioral delta is visible from the tree.
 
-## Output shape
+For a request that also asks how the operation executes, add a separate CallGraph after the Typeflow. Keep their roots and edges independent: the Typeflow follows changing typed roles, while the CallGraph follows execution.
 
-Prefer this order:
+## Typeflow rules
 
-```text
-call graph
-└── entry_point()
-    ├── orchestrator()
-    │   ├── branch_a()
-    │   └── branch_b()
-    └── terminal_effect()
-```
+### Tree notation
+
+Start with a one-sentence outcome, then root the tree at the value, representation, or type under discussion. Use the codebase's exact symbols and the target language's native type notation where source provides them.
 
 ```text
-type flow
-└── InputType
-    └── DomainType
-        └── TransportType
-            └── OutputType
+request body []byte
+└─ decodeCreateLink -->
+   ├─ request CreateLinkRequest
+   └─ err error
 ```
 
-Then add a short explanation paragraph.
+`-->` shows a semantic transformation or boundary, rather than a language-specific function-type operator. Mark an evidence-backed deduction as `[inferred]`. Use `↩ see <node>` for a shared value or cycle, and mark external systems at the edge that crosses their boundary. Repeat a node only when the repeated provenance is the point of the explanation.
 
-## Rules
-
-- Lead with the highest-level outcome before the trees.
-- Keep trees structural: one node per meaningful call, type, conversion, or boundary.
-- Use exact symbol names when known; use descriptive labels only when the code has no named symbol.
-- Do not invent edges. If an edge is inferred, mark it as inferred or omit it.
-- For code changes, distinguish existing flow from changed flow only where behavior actually differs.
-- Keep prose sparse; the trees carry the explanation.
+- A call belongs on an edge when it proves a displayed transformation. Calls that do not construct, transform, validate, transport, or consume the displayed role belong to a CallGraph.
+- Represent wire data, headers, database rows, messages, and files as representations even when the language has no distinct static type for them.
+- Represent static contracts, such as Go interfaces, Rust traits, or generic constraints, at the declaration or conversion they constrain. Runtime value nodes remain values or representations.
+- Keep prose to the outcome and design reading. The Typeflow carries the provenance.
