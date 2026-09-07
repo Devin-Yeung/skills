@@ -1,5 +1,5 @@
 ---
-name: Back-of-the-envelope calculation
+name: back-of-the-envelope-calculation
 description: Perform back-of-the-envelope calculations for system design estimation. Use when user wants to quickly estimate quantities on the order of magnitude, such as QPS, storage, bandwidth, latency, or server count. Or mentions "back of the envelope", roughly estimate", or similar.
 ---
 
