@@ -22,6 +22,8 @@ description: Answer control-flow questions with a compact call tree of an operat
 ```
 
 - A bare name is a step on the execution path: a call, operation, boundary, or other action that matters to the question.
+- Among sibling steps, top-to-bottom order is execution order.
+- A standalone `[concurrent]` node groups direct children that execute concurrently. Its scope ends at those children; nested siblings remain sequential unless another `[concurrent]` node groups them.
 - `[label]` is optional path context: a condition, state, choice, phase, or entry. It can prefix a step or stand alone as a branch node whose children occur in that context. Add it when the bare tree would hide why or how the path is reached.
 - `=>` marks an outcome: a return, error, response, or other terminal result.
 - `~>` marks an effect or hand-off important to the question, such as persistence, publishing an event, or delegating work to another program.
@@ -36,6 +38,8 @@ OrderController.checkout
 │   ├── [declined] => 402 PaymentRequired
 │   └── [approved]
 │       ├── orderRepo.markPaid
-│       └── ~> worker.sendReceiptEmail
+│       └── [concurrent]
+│           ├── ~> receiptWorker.sendEmail
+│           └── ~> analytics.recordPurchase
 └── => 200 OK
 ```
