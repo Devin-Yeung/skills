@@ -7,21 +7,22 @@ description: Trace the execution paths relevant to a code-review question as a c
 
 1. Name the root operation and the review question.
 2. Inspect the code on the paths needed to answer it.
-3. Draw the Call Tree. Show calls, branching conditions, outcomes, and effects or hand-offs that matter to the question.
+3. Draw the Call Tree with the steps, labels, outcomes, and effects or hand-offs needed to answer it.
 
 ## Notation
 
 ```text
 <root>
 ├── <step>
-│   └── [<label>] => <outcome>
 ├── [<label>] <step>
 │   └── ~> <effect or hand-off>
+├── <step>
+│   └── [<label>] => <outcome>
 └── => <outcome>
 ```
 
 - A bare name is a step on the execution path: a call, operation, boundary, or other action that matters to the review.
-- `[label]` names why or how a path is reached: a condition, state, choice, phase, or entry mechanism. Add one when the bare tree would hide that context.
+- `[label]` is optional path context: a condition, state, choice, phase, or entry. Add it when the bare tree would hide why or how the path is reached.
 - `=>` marks an outcome: a return, error, response, or other terminal result.
 - `~>` marks an effect or hand-off important to the review, such as persistence, publishing an event, or delegating work to another program.
 
@@ -30,7 +31,7 @@ description: Trace the execution paths relevant to a code-review question as a c
 ```text
 OrderController.checkout
 ├── checkCartValid
-│   └── [empty] => 400 BadRequest
+│   └── => 400 BadRequest
 ├── paymentGateway.charge
 │   ├── [declined] => 402 PaymentRequired
 │   └── [approved]
