@@ -1,11 +1,11 @@
 ---
 name: call-tree
-description: Trace the execution paths relevant to a code-review question as a compact call tree. Use for control paths, guards, errors, and important effects or hand-offs.
+description: Answer control-flow questions with a compact call tree of an operation's execution paths.
 ---
 
 ## Steps
 
-1. Name the root operation and the review question.
+1. Name the root operation and the control-flow question.
 2. Inspect the code on the paths needed to answer it.
 3. Draw the Call Tree with the steps, labels, outcomes, and effects or hand-offs needed to answer it.
 
@@ -21,17 +21,17 @@ description: Trace the execution paths relevant to a code-review question as a c
 └── => <outcome>
 ```
 
-- A bare name is a step on the execution path: a call, operation, boundary, or other action that matters to the review.
-- `[label]` is optional path context: a condition, state, choice, phase, or entry. Add it when the bare tree would hide why or how the path is reached.
+- A bare name is a step on the execution path: a call, operation, boundary, or other action that matters to the question.
+- `[label]` is optional path context: a condition, state, choice, phase, or entry. It can prefix a step or stand alone as a branch node whose children occur in that context. Add it when the bare tree would hide why or how the path is reached.
 - `=>` marks an outcome: a return, error, response, or other terminal result.
-- `~>` marks an effect or hand-off important to the review, such as persistence, publishing an event, or delegating work to another program.
+- `~>` marks an effect or hand-off important to the question, such as persistence, publishing an event, or delegating work to another program.
 
 ## Example
 
 ```text
 OrderController.checkout
 ├── checkCartValid
-│   └── => 400 BadRequest
+│   └── [invalid] => 400 BadRequest
 ├── paymentGateway.charge
 │   ├── [declined] => 402 PaymentRequired
 │   └── [approved]
